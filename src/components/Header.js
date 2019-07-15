@@ -1,24 +1,23 @@
 import React, { Component } from 'react';
 import { Menu, Button, Icon, Image } from 'semantic-ui-react';
-
+import { handleGetData, handleCheckLocalStorage } from '../handlers/storage';
 
 class Header extends Component {
     state = { 
         activeItem: 'home',
-        color: 'none'
      };
 
-    handleItemClick = (e, { name }) => {
+    handleItemClick = ({ name }) => {
         this.setState({ activeItem: name });
     };
-    componentDidMount(){
-        if(localStorage.getItem('data') !== null){
-            let color = '#' + JSON.parse(localStorage.getItem('data')).color;
-            this.setState({ color });
-        }
-    }
     render() {
-        const { activeItem } = this.state;
+        const { activeItem} = this.state;
+        let username, photo = undefined;
+        if(handleCheckLocalStorage('data')){
+            username = handleGetData('data').username;
+            photo = handleGetData('data').photo;
+        }
+
         return (
             <div>
                 <Menu pointing secondary>
@@ -38,7 +37,7 @@ class Header extends Component {
                     </Menu.Menu>
                     <Menu.Menu position="right">
                         {
-                            (localStorage.getItem('data') === null) ? (
+                            (!handleCheckLocalStorage('data')) ? (
                                 <Menu.Item 
                                 name="login"
                                 active={activeItem === 'login'}
@@ -64,17 +63,17 @@ class Header extends Component {
                                     <div style={{ marginRight: '1.5rem'}}>
                                         <Image 
                                             as='a'
-                                            href={ 'https://twitter.com/'  + JSON.parse(localStorage.getItem('data')).username }
-                                            src={JSON.parse(localStorage.getItem('data')).photo}
+                                            href={ 'https://twitter.com/'  + username }
+                                            src={photo}
                                             avatar 
-                                            style={ {overflow: 'hidden'}}
+                                            style={{overflow: 'hidden'}}
                                         />
                                         <a 
-                                            href={ 'https://twitter.com/'  + JSON.parse(localStorage.getItem('data')).username }
+                                            href={ 'https://twitter.com/'  + username }
                                             style={{ marginLeft: '0.3rem' }}
                                         >
                                             <span>
-                                                {JSON.parse(localStorage.getItem('data')).username}
+                                                {username}
                                             </span>
                                         </a> 
                                     </div>

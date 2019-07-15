@@ -9,7 +9,7 @@ import { getCurrentTime, getHours } from '../handlers/time';
 export default class OAuth extends Component {
   state = {
     user: undefined,
-    activeItem: 'home'
+    disabled: false
   }
   componentDidMount = () => {
     const { socket, provider } = this.props;
@@ -27,18 +27,18 @@ export default class OAuth extends Component {
             date: value.created_at,
             tweets: value.statuses_count
           }
-        },);
-        
+        });
+        const member = user.data.prof;
         let data = {
-          name: user.data.prof.displayName,
-          username: user.data.prof.username,
-          photo: user.data.prof.photos[0]['value'].replace('_normal',''),
-          color: user.data.prof['_json']['profile_link_color'],
-          country: user.data.prof['_json']['location'],
-          date:  user.data.prof['_json']['created_at'],
-          banner: user.data.prof['_json']['profile_banner_url'],
-          following: user.data.prof['_json']['friends_count'],
-          tweets: user.data.prof['_json']['statuses_count'],
+          name: member.displayName,
+          username: member.username,
+          photo: member.photos[0]['value'].replace('_normal',''),
+          color: member['_json']['profile_link_color'],
+          country: member['_json']['location'],
+          date:  member['_json']['created_at'],
+          banner: member['_json']['profile_banner_url'],
+          following: member['_json']['friends_count'],
+          tweets: member['_json']['statuses_count'],
           followers: follower,
           expires: getCurrentTime + getHours(2)
         }
@@ -56,14 +56,12 @@ export default class OAuth extends Component {
   }
 
   checkPopup = () => {
-    console.log("Popup function called")
     const check = setInterval(() => {
       const { popup } = this;
       if (!popup || popup.closed || popup.closed === undefined) {
         clearInterval(check);
-        this.popup.close();
-        this.setState({ disabled: ''});
-        console.log("Popup closed")
+        popup.close();
+        this.setState({ disabled: false });
       }
     }, 1000)
   }
@@ -86,12 +84,12 @@ export default class OAuth extends Component {
     if (!this.state.disabled) {
       this.popup = this.openPopup();
       this.checkPopup();
-      this.setState({disabled: 'disabled'});
+      this.setState({disabled: true});
     }
   }
 
   closeCard = () => {
-    this.setState({ user: undefined, disabled: '' })
+    this.setState({ user: undefined, disabled: false })
     localStorage.clear();
   }
   render() {

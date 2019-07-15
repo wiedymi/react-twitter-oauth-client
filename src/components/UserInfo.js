@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Segment } from 'semantic-ui-react'
 import GetUserInfo from './GetUserInfo';
+import { handleCheckLocalStorage } from '../handlers/storage';
 
 class UserInfo extends Component {
     state = {
@@ -16,17 +17,18 @@ class UserInfo extends Component {
         });
     }
     componentDidUpdate(){
-        if(localStorage.getItem('data') === null && this.state.user === true){
-            this.setState({ user: false });
-        }
-        if(localStorage.getItem('data') !== null && this.state.user === false){
-            this.setState({ user: true });
-        }
+        const { user } = this.state;
+        if(!handleCheckLocalStorage('data') && user){
+            this.setState({ ...this.state, user: false });
+        } 
+        if(handleCheckLocalStorage('data') && !user){
+            this.setState({  ...this.state, user: true });
+        } 
     }
     render() {
         return (
             <Segment    
-                style={{ marginTop: '20px'/*, minHeight: '360px'*/ }}
+                style={{ marginTop: '20px' }}
                 loading={this.state.loading}
             >
                 {
