@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Item, Header, Statistic, Image, List } from 'semantic-ui-react';
-import './GetUserInfo.css';
+//import './user.css';
+import { handleCheckLocalStorage, handleGetData } from '../handlers/storage';
 
 class GetUserInfo extends Component {
     state = {
@@ -8,42 +9,46 @@ class GetUserInfo extends Component {
         date: null
     }
     componentDidMount() {
-        let data = localStorage.getItem("data");
-        data = JSON.parse(data);
-        let color = '#' + data.color;
-        this.setState(() => {
-            return {
-                name: data.name,
-                username: data.username,
-                date: data.date,
-                country: data.country,
-                photo: data.photo,
-                banner: data.banner,
-                color: color,
-                stat: [
-                    { key: 'followers', label: 'падпісчыкі', value: data.followers.length },
-                    { key: 'following', label: 'падпіскі', value: data.following },
-                    { key: 'tweets', label: 'допісы', value: data.tweets },
-                ]
-
-            }
-        })
+        if(handleCheckLocalStorage('data')){
+           const data = handleGetData('data');
+           this.setState(() => {
+                const { 
+                    username, photo, name, date, country, banner, followers, tweets, following 
+                } = data;
+                const color = '#' + data.color;
+                return {
+                    name,
+                    username,
+                    date,
+                    country,
+                    photo,
+                    banner,
+                    color,
+                    stat: [
+                        { key: 'followers', label: 'падпісчыкі', value: followers.length },
+                        { key: 'following', label: 'падпіскі', value: following },
+                        { key: 'tweets', label: 'допісы', value: tweets },
+                    ]
+                }
+            })
+        }
     }
 
-    StatisticExampleGroupShorthand = () => <Statistic.Group widths='three' size='small' items={this.state.stat} />;
     render() {
-     
+        const { username, photo, name, color, date, country, banner } = this.state;
+        const statistic = () => <Statistic.Group widths='three' size='small' items={this.state.stat} />;
         return (
             <>
-                <Image src={this.state.banner} fluid />
+                <Image src={banner} fluid />
                 <Item.Group>
                     <Item>
                         <Item.Image
                             as='a'
-                            href={'https://twitter.com/' + this.state.username}
+                            href={'https://twitter.com/' + username}
                             target='_blank'
+                            rel='noopener noreferrer'
                             size='small'
-                            src={this.state.photo}
+                            src={photo}
                             bordered
                             circular
                             centered
@@ -52,25 +57,26 @@ class GetUserInfo extends Component {
                             <Header
                                 as="h1"                         
                             >
-                                {this.state.name}
+                                {name}
                             </Header>
                             <Item.Meta>
                                 <a
-                                    href={'https://twitter.com/' + this.state.username}
+                                    href={'https://twitter.com/' + username}
                                     target='_blank'
+                                    rel='noopener noreferrer'
                                 >
                                     <Header.Subheader as="h4">
-                                        @{this.state.username}
+                                        @{username}
                                     </Header.Subheader>
                                 </a>
                             </Item.Meta>
                             <Item.Description>
                                 {
-                                    this.state.date !== null ? (
+                                    date !== null ? (
                                         <List>
-                                            <List.Item icon='calendar alternate outline' content={this.state.date.substr(this.state.date.length - 4)} />
-                                            <List.Item icon='marker' content={this.state.country} />
-                                            <List.Item icon='tint' style={ {color: this.state.color} }content={this.state.color} />
+                                            <List.Item icon='calendar alternate outline' content={date.substr(date.length - 4)} />
+                                            <List.Item icon='marker' content={country} />
+                                            <List.Item icon='tint' style={ { color } } content={color} />
                                         </List>
                                     ) : (
                                             <>
@@ -80,7 +86,7 @@ class GetUserInfo extends Component {
                             </Item.Description>
                         </Item.Content>
                     </Item>
-                    {this.StatisticExampleGroupShorthand()}
+                    { statistic() }
                 </Item.Group>
             </>
         )

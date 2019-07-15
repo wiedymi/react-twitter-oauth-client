@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { API_URL } from '../config';
-import Header from './Header/Header';
+import Header from './Header';
 import Content from './Content';
 
 export default class OAuth extends Component {

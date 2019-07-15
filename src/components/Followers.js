@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Card } from 'semantic-ui-react'
 import Follower from './Follower'
+
 class Followers extends Component {
     state = {
         followers: [],
