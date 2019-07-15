@@ -1,5 +1,5 @@
 const handleCheckLocalStorage = key => {
-    if(localStorage.getItem(key) || localStorage.getItem(key) !== null){
+    if(typeof localStorage.getItem(key) === 'string'){
       return true
     }
     else{
@@ -9,7 +9,5 @@ const handleCheckLocalStorage = key => {
 
 const handleGetData = key =>  JSON.parse(localStorage.getItem(key));
 
-const getCurrentTime = () => new Date().getTime();
-
-export { handleCheckLocalStorage, handleGetData, getCurrentTime }
+export { handleCheckLocalStorage, handleGetData }
 

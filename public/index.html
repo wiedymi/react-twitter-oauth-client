@@ -39,5 +39,44 @@
       To begin the development, run `npm start` or `yarn start`.
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
+  <style>
+    .ui.items>.item .meta {
+        margin: 0;
+    }
+
+    .ui.items>.item>.image{
+        border: 2px solid #9b989c;
+    }
+
+    .ui.items>.item>.image+.content{
+      padding-top: 10px;
+    }
+    @media only screen and (max-width: 600px) {
+        .ui.fluid.image{
+            display: none;
+        }
+    }
+    .ui.items:last-child{
+            margin-bottom: 1rem!important; 
+            margin: 1rem;
+    }
+    .ui.segment{
+        padding: 0;
+    }
+
+    .ui.segment p{
+        margin: 1rem;
+    }
+
+    @media only screen and (max-width: 767px){
+        .ui.stackable.cards .card:first-child {
+            margin-top: 2rem!important;
+        }
+    }
+
+    .ui.avatar {
+        border: 2px solid #19CF86;
+    }
+  </style>
   </body>
 </html>

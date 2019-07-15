@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import { API_URL } from '../config';
 import Header from './Header';
 import Content from './Content';
+import { handleCheckLocalStorage, handleGetData } from '../handlers/storage';
+import { getCurrentTime, getHours } from '../handlers/time';
 
 export default class OAuth extends Component {
   state = {
@@ -11,7 +13,7 @@ export default class OAuth extends Component {
   }
   componentDidMount = () => {
     const { socket, provider } = this.props;
-    if(!localStorage.getItem('data') || localStorage.getItem('data') == null){
+    if(!handleCheckLocalStorage('data')){
       socket.on(provider, user => {  
         this.popup.close();
         let follower = [];
@@ -38,7 +40,7 @@ export default class OAuth extends Component {
           following: user.data.prof['_json']['friends_count'],
           tweets: user.data.prof['_json']['statuses_count'],
           followers: follower,
-          expires: new Date().getTime() + 2 * 60 * 60 * 1000
+          expires: getCurrentTime + getHours(2)
         }
 
         localStorage.setItem('data', JSON.stringify(data));
@@ -48,19 +50,20 @@ export default class OAuth extends Component {
     
     }
 
-    if(localStorage.getItem('data')){
-      this.setState({ user: JSON.parse(localStorage.getItem('data')) });
+    if(handleCheckLocalStorage('data')){
+      this.setState({ user: handleGetData('data') });
     }
   }
 
   checkPopup = () => {
+    console.log("Popup function called")
     const check = setInterval(() => {
       const { popup } = this;
       if (!popup || popup.closed || popup.closed === undefined) {
         clearInterval(check);
         this.popup.close();
         this.setState({ disabled: ''});
-        
+        console.log("Popup closed")
       }
     }, 1000)
   }

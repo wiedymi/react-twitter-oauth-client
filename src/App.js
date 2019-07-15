@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import io from 'socket.io-client';
 import { API_URL } from './config';
 import OAuth from './components/OAuth';
-import { handleCheckLocalStorage, handleGetData, getCurrentTime } from './handlers/storage';
+import { handleCheckLocalStorage, handleGetData} from './handlers/storage';
+import { getCurrentTime } from './handlers/time';
 
 const socket = io(API_URL);
 const provider = 'twitter';

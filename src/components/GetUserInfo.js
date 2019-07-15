@@ -71,18 +71,18 @@ class GetUserInfo extends Component {
                                 </a>
                             </Item.Meta>
                             <Item.Description>
-                                {
-                                    date !== null ? (
-                                        <List>
-                                            <List.Item icon='calendar alternate outline' content={date.substr(date.length - 4)} />
-                                            <List.Item icon='marker' content={country} />
-                                            <List.Item icon='tint' style={ { color } } content={color} />
-                                        </List>
-                                    ) : (
-                                            <>
-                                            </>
-                                        )
-                                }
+                            {
+                                date !== null ? (
+                                    <List>
+                                        <List.Item icon='calendar alternate outline' content={date.substr(date.length - 4)} />
+                                        <List.Item icon='marker' content={country} />
+                                        <List.Item icon='tint' style={ { color } } content={color} />
+                                    </List>
+                                ) : (
+                                        <>
+                                        </>
+                                    )
+                            }
                             </Item.Description>
                         </Item.Content>
                     </Item>

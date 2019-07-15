@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Card } from 'semantic-ui-react'
 import Follower from './Follower'
+import { handleCheckLocalStorage, handleGetData } from '../handlers/storage';
 
 class Followers extends Component {
     state = {
@@ -8,29 +9,28 @@ class Followers extends Component {
         visible: false
     }
     componentWillMount() {
-   
-        if(localStorage.getItem('data') !== null){
-            let data = localStorage.getItem("data");
-            data = JSON.parse(data);
-            let follower = data.followers;
-            this.setState({ visible: true, followers: follower});
+        if(handleCheckLocalStorage('data')){
+            const data = handleGetData('data');
+            const { followers } = data;
+            this.setState({  ...this.state, visible: true, followers});
         }
-
     }
 
     componentDidUpdate(){
-        if(localStorage.getItem('data') === null && this.state.visible === true){
-            this.setState({ visible: false });
-        }
-        if(localStorage.getItem('data') !== null && this.state.visible === false){
-            this.setState({ visible: true });
-        }
+        const { visible } = this.state;
+        if(!handleCheckLocalStorage('data') && visible){
+            this.setState({ ...this.state, visible: false });
+        } 
+        if(handleCheckLocalStorage('data') && !visible){
+            this.setState({  ...this.state, visible: true });
+        } 
     }
     render() { 
+        const { visible } = this.state;
         return (
             <>
                 {
-                    this.state.visible ? (
+                    visible ? (
                         <>
                             <Card fluid>
                                 <Card.Content>
